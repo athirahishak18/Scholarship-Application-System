@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}System Logs{% endblock %}
+
+{% block content %}
+<h2 class="mb-3">System Logs</h2>
+
+<div class="d-flex gap-2 mb-3">
+  <a class="btn btn-secondary" href="{{ url_for('admin.dashboard') }}">Back to Dashboard</a>
+
+  <form method="post" action="{{ url_for('admin.clear_logs') }}">
+    <button class="btn btn-danger"
+            type="submit"
+            onclick="return confirm('Clear ALL logs?')">
+      Clear Logs
+    </button>
+  </form>
+</div>
+
+<form class="row g-2 align-items-end mb-3" method="get" action="{{ url_for('admin.system_logs') }}">
+  <div class="col-md-3">
+    <label class="form-label">Level</label>
+    <select class="form-select" name="level">
+      <option value="">All</option>
+      {% for lv in levels %}
+        <option value="{{ lv }}" {% if selected_level == lv %}selected{% endif %}>{{ lv }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Action</label>
+    <select class="form-select" name="action">
+      <option value="">All</option>
+      {% for ac in actions %}
+        <option value="{{ ac }}" {% if selected_action == ac %}selected{% endif %}>{{ ac }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="col-md-5 d-flex gap-2">
+    <button class="btn btn-primary" type="submit">Filter</button>
+    <a class="btn btn-outline-secondary" href="{{ url_for('admin.system_logs') }}">Reset</a>
+  </div>
+</form>
+
+<div class="table-responsive">
+  <table class="table table-bordered table-striped align-middle">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Time</th>
+        <th>Level</th>
+        <th>Action</th>
+        <th>Message</th>
+        <th>User</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for log in logs %}
+      <tr>
+        <td>{{ log.id }}</td>
+        <td>{{ log.created_at }}</td>
+        <td>{{ log.level }}</td>
+        <td>{{ log.action }}</td>
+        <td>{{ log.message }}</td>
+        <td>
+          {% if log.user %}
+            {{ log.user.username }} (ID {{ log.user.id }})
+          {% else %}
+            -
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3>Assigned Applications</h3>
+
+<!-- Sort buttons -->
+<div class="mb-3">
+  <a href="?sort=date" class="btn btn-secondary btn-sm">Sort by Date</a>
+  <a href="?sort=status" class="btn btn-secondary btn-sm">Sort by Status</a>
+</div>
+
+<table class="table table-bordered align-middle">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Student</th>
+      <th>Scholarship</th>
+      <th>Status</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  {% for a in apps %}
+    <tr>
+      <td>{{ a.id }}</td>
+      <td>{{ a.student_id }}</td>
+      <td>{{ a.scholarship.title }}</td>
+      <td>{{ a.status }}</td>
+      <td>
+        {% if a.status != 'Reviewed' %}
+          <a href="{{ url_for('reviewer.review', app_id=a.id) }}"
+             class="btn btn-sm btn-primary">
+            Review
+          </a>
+        {% else %}
+          <a href="{{ url_for('reviewer.view_review', app_id=a.id) }}"
+             class="btn btn-sm btn-outline-secondary">
+            View
+          </a>
+        {% endif %}
+      </td>
+    </tr>
+  {% else %}
+    <tr>
+      <td colspan="5" class="text-center text-muted">
+        No applications assigned to you.
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

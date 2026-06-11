@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Welcome, {{ current_user.username }}</h2>
+
+    <!-- Edit Profile Button -->
+    <a href="{{ url_for('student.profile') }}" class="btn btn-outline-secondary">
+      Edit Profile
+    </a>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="mb-4">
+    <a href="{{ url_for('student.scholarships') }}" class="btn btn-primary">
+      Browse Scholarships
+    </a>
+  </div>
+
+  <!-- Applications Table -->
+  <h4>Your Applications</h4>
+
+  {% if applications %}
+  <table class="table table-striped">
+      <thead>
+          <tr>
+              <th>Scholarship</th>
+              <th>Status</th>
+              <th>Submitted At</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for app in applications %}
+          <tr>
+              <td>{{ app.scholarship.title }}</td>
+              <td>
+                <span class="badge 
+                  {% if app.status == 'Accepted' %}bg-success
+                  {% elif app.status == 'Rejected' %}bg-danger
+                  {% elif app.status == 'Reviewed' %}bg-info
+                  {% else %}bg-warning{% endif %}">
+                  {{ app.status }}
+                </span>
+              </td>
+              <td>{{ app.submitted_at.strftime('%Y-%m-%d') }}</td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+  {% else %}
+    <p class="text-muted">You have not applied for any scholarships yet.</p>
+  {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,322 @@
+{% extends "base.html" %}
+{% block title %}Apply for Scholarship{% endblock %}
+
+{% block content %}
+<h4>Multimedia University Scholarship Form</h4>
+<p><strong>Scholarship:</strong> {{ scholarship.title }}</p>
+<p><strong>Application Deadline:</strong> {{ scholarship.application_deadline.strftime('%d %b %Y') }}</p>
+
+<form method="POST" enctype="multipart/form-data">
+
+<!-- Step 1: Personal Information -->
+<div class="step step-1">
+    <h5>Personal Information</h5>
+
+    <div class="mb-3">
+        <label>Passport Size Photo</label>
+        <input type="file" class="form-control" name="photo" required>
+    </div>
+
+    <div class="mb-3">
+        <label>Name (as in NRIC / Passport)</label>
+        <input type="text" class="form-control" name="full_name" required>
+    </div>
+
+    <div class="mb-3">
+        <label>Home Address</label>
+        <textarea class="form-control" name="address" required></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label>IC / Passport Number</label>
+        <input type="text" class="form-control" name="ic_number" required>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <label>Date of Birth</label>
+            <input type="date" class="form-control" name="dob" required>
+        </div>
+        <div class="col">
+            <label>Age</label>
+            <input type="number" class="form-control" name="age" required>
+        </div>
+    </div>
+
+    <div class="mb-3 mt-3">
+        <label>Intake</label>
+        <input type="text" class="form-control" name="intake">
+    </div>
+
+    <div class="mb-3">
+        <label>Programme</label>
+        <select class="form-control" name="programme" id="programme">
+            <option>Foundation</option>
+            <option>Diploma</option>
+            <option>Degree</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Course</label>
+        <input type="text" class="form-control" placeholder="e.g. Bachelor of Computer Science" name="course">
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <label>Nationality</label>
+            <input type="text" class="form-control" name="nationality">
+        </div>
+        <div class="col">
+            <label>Race</label>
+            <input type="text" class="form-control" name="race">
+        </div>
+    </div>
+
+    <div class="mb-3 mt-3">
+        <label>Sex</label><br>
+        <input type="radio" name="sex" value="Male"> Male
+        <input type="radio" name="sex" value="Female"> Female
+    </div>
+
+    <div class="mb-3">
+        <label>Contact Number</label>
+        <input type="text" class="form-control" name="contact">
+    </div>
+
+    <div class="mb-3">
+        <label>Home Contact Number</label>
+        <input type="text" class="form-control" name="home_contact">
+    </div>
+
+    <div class="mb-3">
+    <label class="form-label">
+        Household Monthly Income (RM)
+    </label>
+    <input type="number" step="0.01" class="form-control" 
+           name="household_income" id="household_income" required>
+
+    <small class="text-muted">
+        Please upload latest <strong>true copy of income proof</strong> 
+        (salary slip / employer letter / statutory declaration). 
+        <strong>PDF format only.</strong>
+    </small>
+
+    <input type="file" class="form-control mt-2"
+           name="income_proof"
+           accept="application/pdf"
+           required>
+</div>
+
+<div class="mb-3">
+    <label class="form-label">
+        Current CGPA
+    </label>
+    <input type="number" step="0.01" min="0" max="4"
+           class="form-control" name="cgpa" id="cgpa" required>
+
+    <small class="text-muted">
+        Please upload your <strong>latest academic transcript or CGPA statement</strong>.
+        <strong>PDF format only.</strong>
+    </small>
+
+    <input type="file" class="form-control mt-2"
+           name="cgpa_proof"
+           accept="application/pdf"
+           required>
+</div>
+
+
+    <div class="mb-3">
+        <label>Email Address</label>
+        <input type="email" class="form-control" name="email">
+    </div>
+    <button type="button" class="btn btn-primary" onclick="nextStep()" >Next</button>
+</div>
+
+<!-- Step 2: Family Background -->
+<div class="step step-2 d-none">
+    <h5>Family Background</h5>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Relationship</th>
+                <th>Age</th>
+                <th>Occupation</th>
+                <th>Monthly Income (RM)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in range(4) %}
+            <tr>
+                <td><input class="form-control" name="family_name[]"></td>
+                <td><input class="form-control" name="relationship[]"></td>
+                <td><input class="form-control" name="family_age[]"></td>
+                <td><input class="form-control" name="occupation[]"></td>
+                <td><input class="form-control" name="family_income[]"></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-secondary" onclick="prevStep()">Back</button>
+    <button type="button" class="btn btn-primary" onclick="nextStep()">Next</button>
+</div>
+
+<!-- Step 3: Education Background -->
+<div class="step step-3 d-none">
+    <h5>Education Background</h5>
+    <div class="mb-3">
+        <label>Name of School / Institution</label>
+        <input type="text" class="form-control" name="school_name">
+    </div>
+    <div class="mb-3">
+        <label>Highest Academic Qualification</label>
+        <select class="form-control" name="qualification">
+            <option>SPM</option>
+            <option>STPM</option>
+            <option>A-Level</option>
+            <option>UEC</option>
+            <option>Matriculation</option>
+            <option>Others</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label>Attach Certified True Copy</label>
+        <input type="file" class="form-control" name="academic_doc">
+    </div>
+    <br>
+    <button type="button" class="btn btn-secondary" onclick="prevStep()">Back</button>
+    <button type="button" class="btn btn-primary" onclick="nextStep()">Next</button>
+</div>
+
+<!-- Step 4: Involvement -->
+<div class="step step-4 d-none">
+    <h5>Involvement in Activities</h5>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Level</th>
+                <th>Year</th>
+                <th>Achievement</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in range(5) %}
+            <tr>
+                <td><input class="form-control" name="activity_type[]"></td>
+                <td>
+                    <select class="form-control" name="level[]">
+                        <option>None</option>
+                        <option>State</option>
+                        <option>National</option>
+                        <option>International</option>
+                    </select>
+                </td>
+                <td><input class="form-control" name="year[]"></td>
+                <td><input class="form-control" name="achievement[]"></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-secondary" onclick="prevStep()">Back</button>
+    <button type="button" class="btn btn-primary" onclick="nextStep()">Next</button>
+</div>
+
+<!-- Step 5: Personal Statement -->
+<div class="step step-5 d-none">
+    <h5>Personal Statement</h5>
+    <label>State briefly why you are deserving of this scholarship (Max 1000 words)</label>
+    <textarea class="form-control" rows="8" maxlength="1000" name="statement" required></textarea>
+    <br>
+
+    <button type="button" class="btn btn-secondary" onclick="prevStep()">Back</button>
+    <button type="submit" class="btn btn-success">Submit Application</button>
+</div>
+</form>
+
+<script>
+let scholarshipCriteria = {{ scholarship.eligibility_criteria | tojson | safe }};
+
+// =======================
+// MULTI-STEP FORM NAVIGATION + ELIGIBILITY CHECK
+// =======================
+let currentStep = 1;
+const totalSteps = 5;
+
+function showStep(step) {
+    document.querySelectorAll(".step").forEach(el => el.classList.add("d-none"));
+    const active = document.querySelector(".step-" + step);
+    if (active) active.classList.remove("d-none");
+}
+
+// Check eligibility criteria
+function validateEligibility() {
+    const cgpa = parseFloat(document.getElementById('cgpa')?.value) || 0;
+    const income = parseFloat(document.getElementById('household_income')?.value) || 0;
+    const programme = document.getElementById('programme')?.value || '';
+
+    let messages = [];
+
+    if (scholarshipCriteria) {
+        if (scholarshipCriteria.min_cgpa && cgpa < scholarshipCriteria.min_cgpa) {
+            messages.push(`- Your CGPA (${cgpa}) is below the minimum required (${scholarshipCriteria.min_cgpa}).`);
+        }
+        if (scholarshipCriteria.max_income && income > scholarshipCriteria.max_income) {
+            messages.push(`- Your household income (${income}) exceeds the maximum allowed (${scholarshipCriteria.max_income}).`);
+        }
+        if (scholarshipCriteria.excluded_programmes && scholarshipCriteria.excluded_programmes.includes(programme)) {
+            messages.push(`- Programme "${programme}" is not eligible.`);
+        }
+    }
+
+    return messages;
+}
+
+// Move to next step
+function nextStep() {
+    // 1️⃣ Check required fields
+    const currentFields = document.querySelectorAll(".step-" + currentStep + " [required]");
+    for (let field of currentFields) {
+        if (!field.value) {
+            alert("Please fill all required fields in this step.");
+            return;
+        }
+    }
+
+    // 2️⃣ Check eligibility (only on Step 1 where CGPA/income/programme exist)
+    if (currentStep === 1) {
+        const eligibilityMessages = validateEligibility();
+        const cgpa = parseFloat(document.getElementById('cgpa').value) || 0;
+        if (cgpa > 4.0) {
+            alert("CGPA cannot exceed 4.0");
+            return;
+        }
+        if (eligibilityMessages.length > 0) {
+            alert("Eligibility check failed:\n" + eligibilityMessages.join("\n"));
+            return;
+        }
+    }
+
+    // 3️⃣ Move to next step if everything is okay
+    if (currentStep < totalSteps) {
+        currentStep++;
+        showStep(currentStep);
+    }
+}
+
+// Move to previous step
+function prevStep() {
+    if (currentStep > 1) {
+        currentStep--;
+        showStep(currentStep);
+    }
+}
+
+// Show initial step
+showStep(currentStep);
+
+</script>
+
+{% endblock %}

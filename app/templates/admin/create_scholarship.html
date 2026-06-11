@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Create Scholarship{% endblock %}
+{% block content %}
+<h2>Create New Scholarship</h2>
+
+<form method="POST">
+    {{ form.hidden_tag() }}
+
+    <div class="mb-3">
+        {{ form.title.label(class="form-label") }}
+        {{ form.title(class="form-control") }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.description.label(class="form-label") }}
+        {{ form.description(class="form-control", rows="4") }}
+    </div>
+
+    <hr>
+
+    <h5 class="mb-3">Requirements (Optional)</h5>
+
+    <div class="mb-3">
+        {{ form.min_cgpa.label(class="form-label") }}
+        {{ form.min_cgpa(class="form-control", placeholder="e.g. 3.50") }}
+        <small class="text-muted">Leave empty if not required.</small>
+    </div>
+
+    <div class="mb-3">
+        {{ form.max_income.label(class="form-label") }}
+        {{ form.max_income(class="form-control", placeholder="e.g. 4850") }}
+        <small class="text-muted">Leave empty to ignore income requirement.</small>
+    </div>
+
+    <div class="mb-3">
+        {{ form.other_requirements.label(class="form-label") }}
+        {{ form.other_requirements(class="form-control", rows="4", placeholder="One requirement per line") }}
+    </div>
+
+    <hr>
+
+    <div class="mb-3">
+        {{ form.documents_required.label(class="form-label") }}
+        {{ form.documents_required(class="form-control") }}
+        <small class="form-text text-muted">Comma-separated document names (e.g., transcript, essay)</small>
+    </div>
+
+    <div class="mb-3">
+    {{ form.application_deadline.label(class="form-label") }}
+    {{ form.application_deadline(class="form-control", min=date.today().isoformat()) }}
+</div>
+
+    <button type="submit" class="btn btn-success">Create Scholarship</button>
+</form>
+{% endblock %}

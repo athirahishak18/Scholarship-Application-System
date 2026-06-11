@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3>Scholarship Committee – Applications</h3>
+
+<!-- FILTER & SORT CONTROLS -->
+<div class="mb-3 d-flex flex-wrap gap-2">
+
+  <!-- Status filters -->
+  <a class="btn btn-secondary btn-sm"
+     href="{{ url_for('committee.applications') }}">
+    All
+  </a>
+
+  <a class="btn btn-outline-secondary btn-sm"
+     href="{{ url_for('committee.applications', status='Reviewed') }}">
+    Reviewed
+  </a>
+
+  <a class="btn btn-outline-secondary btn-sm"
+     href="{{ url_for('committee.applications', status='Accepted') }}">
+    Accepted
+  </a>
+
+  <a class="btn btn-outline-secondary btn-sm"
+     href="{{ url_for('committee.applications', status='Rejected') }}">
+    Rejected
+  </a>
+
+
+ 
+</div>
+
+<!-- APPLICATION TABLE -->
+<table class="table table-bordered align-middle">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Student ID</th>
+      <th>Scholarship</th>
+      <th>Status</th>
+ 
+      <th>Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for app, avg_score, fail_count, completed_count in rows %}
+      <tr>
+        <td>{{ app.id }}</td>
+
+        <!-- ✅ FIX: show real student ID (your_id) instead of numeric DB id -->
+        <td>{{ app.student.your_id or app.student_id }}</td>
+
+        <td>{{ app.scholarship.title }}</td>
+        <td>
+          <span class="badge
+            {% if app.status == 'Accepted' %} bg-success
+            {% elif app.status == 'Rejected' %} bg-danger
+            {% elif app.status == 'Reviewed' %} bg-info
+            {% else %} bg-secondary
+            {% endif %}
+          ">
+            {{ app.status }}
+          </span>
+        </td>
+        
+        <td>
+          <a class="btn btn-primary btn-sm"
+             href="{{ url_for('committee.view_application', application_id=app.id) }}">
+            Open
+          </a>
+        </td>
+      </tr>
+    {% else %}
+      <tr>
+        <td colspan="7" class="text-center text-muted">
+          No applications found.
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<!-- BACK TO DASHBOARD -->
+<div class="mt-3">
+  <a href="{{ url_for('committee.dashboard') }}" class="btn btn-secondary">
+    ← Back to Dashboard
+  </a>
+</div>
+
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Scholarship Details{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-start mb-3">
+  <div>
+    <h2 class="mb-1">{{ scholarship.title }}</h2>
+    <div class="text-muted">Scholarship ID: {{ scholarship.id }}</div>
+  </div>
+  <div class="d-flex gap-2">
+    <a href="{{ url_for('admin.edit_scholarship', scholarship_id=scholarship.id) }}" class="btn btn-primary">Edit</a>
+    <a href="{{ url_for('admin.manage_scholarships') }}" class="btn btn-outline-secondary">Back</a>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <h5>Description</h5>
+    <p class="mb-0">{{ scholarship.description }}</p>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <h5>Eligibility Criteria</h5>
+
+    {% if eligibility_lines and eligibility_lines|length > 0 %}
+      <ul class="mb-0">
+        {% for item in eligibility_lines %}
+          <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-muted mb-0">No eligibility criteria specified.</p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <h5>Details</h5>
+    <ul class="mb-0">
+      <li><strong>Deadline:</strong>
+        {% if scholarship.application_deadline %}
+          {{ scholarship.application_deadline.strftime('%Y-%m-%d') }}
+        {% else %}
+          -
+        {% endif %}
+      </li>
+      <li><strong>Documents Required:</strong> {{ scholarship.documents_required or '-' }}</li>
+      <li><strong>Applications:</strong> {{ application_count }}</li>
+    </ul>
+  </div>
+</div>
+
+{% endblock %}

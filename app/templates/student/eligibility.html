@@ -1,0 +1,14 @@
+<h2>Eligibility Check for {{ scholarship.title }}</h2>
+<p>{{ scholarship.eligibility_criteria }}</p>
+
+{% if eligible is not none %}
+    {% if eligible %}
+        <p class="text-success">You are eligible!</p>
+    {% else %}
+        <p class="text-danger">You are not eligible.</p>
+    {% endif %}
+{% endif %}
+
+<form method="POST">
+    <button type="submit">Check Eligibility</button>
+</form>

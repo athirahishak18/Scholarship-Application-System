@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Admin Reports{% endblock %}
+
+{% block content %}
+<h2 class="mb-3">Admin Reports</h2>
+
+<div class="d-flex gap-2 mb-3">
+  <a class="btn btn-secondary" href="{{ url_for('admin.dashboard') }}">Back to Dashboard</a>
+  <a class="btn btn-success" href="{{ url_for('admin.export_reports_csv') }}">Export CSV</a>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <h5 class="card-title">Totals</h5>
+    <ul class="mb-0">
+      <li>Total Users: <b>{{ total_users }}</b></li>
+      <li>Total Scholarships: <b>{{ total_scholarships }}</b></li>
+      <li>Total Applications: <b>{{ total_apps }}</b></li>
+    </ul>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <h5 class="card-title">Applications by Status</h5>
+    <ul class="mb-0">
+      {% for k, v in status_counts.items() %}
+        <li>{{ k }}: <b>{{ v }}</b></li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">Users by Role</h5>
+    <ul class="mb-0">
+      {% for k, v in role_counts.items() %}
+        <li>{{ k }}: <b>{{ v }}</b></li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

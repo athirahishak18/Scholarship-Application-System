@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Application Detail{% endblock %}
+
+{% block content %}
+<h2>Application Detail</h2>
+
+<div class="card p-3 mb-3">
+  <p><b>Application ID:</b> {{ application.id }}</p>
+  <p><b>Status:</b> {{ application.status }}</p>
+  <p><b>Submitted At:</b> {{ application.submitted_at }}</p>
+
+  <p><b>Student:</b>
+    {% if application.student %}
+      {{ application.student.username }} (ID: {{ application.student.id }})
+    {% else %}
+      {{ application.student_id }}
+    {% endif %}
+  </p>
+
+  <p><b>Scholarship:</b>
+    {% if application.scholarship %}
+      {{ application.scholarship.title }} (ID: {{ application.scholarship.id }})
+    {% else %}
+      {{ application.scholarship_id }}
+    {% endif %}
+  </p>
+</div>
+
+<div class="card p-3 mb-3">
+  <h5 class="mb-2">Uploaded Documents</h5>
+
+  {% if documents and documents|length > 0 %}
+    <ul class="mb-0">
+      {% for doc in documents %}
+        <li>
+          <a href="{{ url_for('static', filename=doc) }}" target="_blank">
+            {{ doc }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="text-muted mb-0">No documents uploaded.</p>
+  {% endif %}
+</div>
+
+<div class="card p-3 mb-3">
+  <h5 class="mb-2">Form Data</h5>
+
+  {% if application.form_data %}
+    <div class="table-responsive">
+      <table class="table table-sm table-bordered">
+        <tbody>
+          {% for key, value in application.form_data.items() %}
+            <tr>
+              <th style="width: 250px;">{{ key }}</th>
+              <td>
+                {% if value is sequence and value is not string %}
+                  {{ value | join(", ") }}
+                {% else %}
+                  {{ value }}
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="text-muted mb-0">No form data found.</p>
+  {% endif %}
+</div>
+
+<a class="btn btn-secondary" href="{{ url_for('admin.manage_applications') }}">
+  Back to Applications
+</a>
+{% endblock %}

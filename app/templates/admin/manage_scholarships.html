@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Manage Scholarships{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="mb-0">Manage Scholarships</h2>
+  <a href="{{ url_for('admin.create_scholarship') }}" class="btn btn-primary">+ Create New Scholarship</a>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-bordered table-striped align-middle">
+    <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Deadline</th>
+        <th>Applications</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in scholarships %}
+      <tr>
+        <td>{{ s.id }}</td>
+        <td>{{ s.title }}</td>
+        <td>
+          {% if s.application_deadline %}
+            {{ s.application_deadline.strftime('%Y-%m-%d') }}
+          {% else %}
+            -
+          {% endif %}
+        </td>
+        <td>{{ app_counts.get(s.id, 0) }}</td>
+        <td class="d-flex gap-2">
+          <a class="btn btn-sm btn-outline-dark" href="{{ url_for('admin.scholarship_detail', scholarship_id=s.id) }}">View</a>
+          <a class="btn btn-sm btn-outline-primary" href="{{ url_for('admin.edit_scholarship', scholarship_id=s.id) }}">Edit</a>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="5" class="text-center">No scholarships found.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+{% endblock %}
